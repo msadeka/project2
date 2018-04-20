@@ -12,8 +12,7 @@ FactoryBot.define do
     first_name "Mark"
     last_name "Heimann"
     bio "Mark is currently among the top 150 players in the United States and has won 4 national scholastic chess championships."
-    phone { rand(10 ** 10).to_s.rjust(10,'0') }
-    email { |i| "#{i.first_name[0]}#{i.last_name}#{(1..99).to_a.sample}@example.com".downcase }
+    association :user
     active true
   end
   
@@ -41,6 +40,38 @@ FactoryBot.define do
     state "PA"
     zip "15213"
     max_capacity 16
+    active true
+  end
+  
+  factory :student do
+    first_name "Ted"
+    last_name "Gruberman"
+    association :family
+    rating nil
+    date_of_birth 10.years.ago.to_date
+    active true
+  end
+
+  factory :family do
+    family_name "Gruberman"
+    parent_first_name "Ed"
+    association :user
+    active true
+  end
+
+  factory :registration do
+    association :camp
+    association :student
+    payment "YmVjY2E6c2VjcmV0"
+  end
+
+  factory :user do
+    username "oali"
+    password "doIcare"
+    password_confirmation "doIcare"
+    role "admin"
+    email { |a| "#{a.username}@notabigdeal.com".downcase }
+    phone { rand(10 ** 10).to_s.rjust(10,'0') }
     active true
   end
 
