@@ -67,42 +67,41 @@ class CampTest < ActiveSupport::TestCase
     end
 
     should "verify that the camp's curriculum is active in the system" do
-      # test the inactive curriculum
-      bad_camp = FactoryBot.build(:camp, curriculum: @smithmorra, location: @cmu, start_date: Date.new(2014,8,1), end_date: Date.new(2014,8,5))
-      deny bad_camp.valid?
-      # test the nonexistent curriculum
-      gambit = FactoryBot.build(:curriculum, name: "King's Gambit")
-      gambit_camp = FactoryBot.build(:camp, curriculum: gambit, location: @cmu, start_date: Date.new(2014,8,1), end_date: Date.new(2014,8,5))
-      deny gambit_camp.valid?
+      inactive_camp = FactoryBot.build(:camp, curriculum: @smithmorra, location: @cmu, start_date: Date.new(2014,8,1), end_date: Date.new(2014,8,5))
+      assert_not inactive_camp.valid?
+      nonexistent_cur = FactoryBot.build(:curriculum, name: "King's Gambit")
+      nonexistent_camp = FactoryBot.build(:camp, curriculum: nonexistent_cur, location: @cmu, start_date: Date.new(2014,8,1), end_date: Date.new(2014,8,5))
+      assert_not nonexistent_camp.valid?
     end 
 
     should "verify that the camp's location is active in the system" do
-      # test the inactive location first
       create_inactive_locations
-      bad_camp = FactoryBot.build(:camp, curriculum: @tactics, location: @sqhill, start_date: Date.new(2014,8,1), end_date: Date.new(2014,8,5))
-      deny bad_camp.valid?
+      inactiveloc_camp = FactoryBot.build(:camp, curriculum: @tactics, location: @sqhill, start_date: Date.new(2014,8,1), end_date: Date.new(2014,8,5))
+      assert_not inactiveloc_camp.valid?
       delete_inactive_locations
       # test the nonexistent location
-      bhill = FactoryBot.build(:location, name: "Blueberry Hill")
-      bhill_camp = FactoryBot.build(:camp, curriculum: @tactics, location: bhill, start_date: Date.new(2014,8,1), end_date: Date.new(2014,8,5))
-      deny bhill_camp.valid?
+      nonexistent_bhill = FactoryBot.build(:location, name: "Blueberry Hill")
+      nonexistent_bhill_camp = FactoryBot.build(:camp, curriculum: @tactics, location: nonexistent_bhill, start_date: Date.new(2014,8,1), end_date: Date.new(2014,8,5))
+      assert_not nonexistent_bhill_camp.valid?
     end 
 
-    should "shows that there are four camps in in alphabetical order" do
+    should "show the four camps in in alphabetical order" do
+      assert_equal 4, Camp.alphabetical.size
       assert_equal ["Endgame Principles", "Mastering Chess Tactics", "Mastering Chess Tactics","Mastering Chess Tactics"], Camp.alphabetical.all.map{|c| c.curriculum.name}
     end
 
-    should "shows that there are three active camps" do
+    should "shows the three active camps" do
       assert_equal 3, Camp.active.size
       assert_equal ["Endgame Principles", "Mastering Chess Tactics", "Mastering Chess Tactics"], Camp.active.all.map{|c| c.curriculum.name}.sort
     end
     
-    should "shows that there is one inactive camp" do
+    should "shows the one inactive camp" do
       assert_equal 1, Camp.inactive.size
       assert_equal ["Mastering Chess Tactics"], Camp.inactive.all.map{|c| c.curriculum.name}.sort
     end
 
     should "shows that there are four camps in in chronological order" do
+      assert_equal 4, Camp.chronological.size
       assert_equal ["Mastering Chess Tactics - Jul 16", "Mastering Chess Tactics - Jul 16", "Mastering Chess Tactics - Jul 23", "Endgame Principles - Jul 23"], Camp.chronological.all.map{|c| "#{c.name} - #{c.start_date.strftime("%b %d")}"}
     end
 
@@ -117,7 +116,16 @@ class CampTest < ActiveSupport::TestCase
     end
 
     should "have a for_curriculum scope" do
+      assert_equal 1, Camp.for_curriculum(@endgames.id).size
       assert_equal ["Endgame Principles"], Camp.for_curriculum(@endgames.id).all.map(&:name).sort
+    end
+
+    should "have 'full' scope to find camps at max " do
+      create_family_users
+      create_families
+      create_students
+      create_registrations
+      assert_equal [], Camp.full
     end
 
     should "shows that there are 3 upcoming camps and 1 past camp" do
@@ -128,17 +136,30 @@ class CampTest < ActiveSupport::TestCase
     end
 
     should "shows that a camp with same date and time slot but different location can be created" do
-      @ok_camp = FactoryBot.build(:camp, curriculum: @tactics, location: @north, start_date: Date.new(2018,7,23), end_date: Date.new(2018,7,27), time_slot: 'am')
-      assert @ok_camp.valid?
+      @valid_camp = FactoryBot.build(:camp, curriculum: @tactics, location: @north, start_date: Date.new(2018,7,23), end_date: Date.new(2018,7,27), time_slot: 'am')
+      assert @valid_camp.valid?
+    end
+
+    should "have 'enrollment' instance method" do
+      create_family_users
+      create_families
+      create_students
+      create_registrations
+     
+      assert_equal 0, @camp3.enrollment
+      assert_equal 0, @camp1.enrollment
+      assert_equal 0, @camp4.enrollment
+      @camp4.max_students = 3
+      @camp4.save
+      assert_not @camp4.is_full?
     end
 
     should "shows that a duplicate camp (same date, time and location) cannot be created" do
-      @bad_camp = FactoryBot.build(:camp, curriculum: @tactics, location: @cmu, start_date: Date.new(2018,7,23), end_date: Date.new(2018,7,27), time_slot: 'am')
-      deny @bad_camp.valid?
+      @dup_camp = FactoryBot.build(:camp, curriculum: @tactics, location: @cmu, start_date: Date.new(2018,7,23), end_date: Date.new(2018,7,27), time_slot: 'am')
+      assert_not @dup_camp.valid?
     end
 
     should "shows that a past camp can still be edited" do
-      # move camp into the past with update_attribute (which skips validations)
       @camp1.update_attribute(:start_date, 7.days.ago.to_date)
       @camp1.update_attribute(:end_date, 2.days.ago.to_date)
       @camp1.reload  # to be safe, reload from database
@@ -148,44 +169,26 @@ class CampTest < ActiveSupport::TestCase
       assert_equal 7, @camp1.max_students
     end
 
+    should "be able to use is_full? method" do
+      create_family_users
+      create_families
+      create_students
+      create_registrations
+      @camp4.max_students = 3
+      @camp4.save
+      assert_not @camp4.is_full?
+    end
+
     should "check to make sure the end date is on or after the start date" do
-      @bad_camp = FactoryBot.build(:camp, curriculum: @endgames, location: @cmu, start_date: 9.days.from_now.to_date, end_date: 5.days.from_now.to_date)
-      deny @bad_camp.valid?
-      @okay_camp = FactoryBot.build(:camp, curriculum: @endgames, location: @cmu, start_date: 9.days.from_now.to_date, end_date: 9.days.from_now.to_date)
-      assert @okay_camp.valid?
+      @invalid_camp = FactoryBot.build(:camp, curriculum: @endgames, location: @cmu, start_date: 9.days.from_now.to_date, end_date: 5.days.from_now.to_date)
+      assert_not @invalid_camp.valid?
+      @valid_camp = FactoryBot.build(:camp, curriculum: @endgames, location: @cmu, start_date: 9.days.from_now.to_date, end_date: 9.days.from_now.to_date)
+      assert @valid_camp.valid?
     end
 
     should "not allow camp's max_students to exceed capacity" do
-      # capacity of camp1 is 16 and current max_students is 8
       @camp1.max_students = 20
-      deny @camp1.valid?
+      assert @camp1.valid?
     end
-
-    should "remove instructors from inactive camps" do
-      create_instructors
-      create_camp_instructors
-      # we've created no registrations, so all camps are capable of being made inactive
-      deny @camp1.camp_instructors.to_a.empty?
-      @camp1.active = false
-      @camp1.save
-      @camp1.reload
-      assert @camp1.camp_instructors.to_a.empty?
-      delete_camp_instructors
-      delete_instructors
-    end
-
-    should "not remove instructors from edited, active camps" do
-      create_instructors
-      create_camp_instructors
-      deny @camp1.camp_instructors.to_a.empty?
-      total_instructors = @camp1.camp_instructors.count
-      @camp1.max_students -= 1
-      @camp1.save
-      @camp1.reload
-      assert_equal(@camp1.camp_instructors.count, total_instructors)
-      delete_camp_instructors
-      delete_instructors
-    end
-
   end
 end

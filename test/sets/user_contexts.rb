@@ -1,52 +1,31 @@
 module Contexts
   module UserContexts
     def create_users
-      @batoul_user  = FactoryBot.create(:user)
-      @preetha_user = FactoryBot.create(:user, username: "preethag", phone: "666-111-2222")
-      @osama_user   = FactoryBot.create(:user, username: "oali", role: "instructor")
+      @kam_user = FactoryBot.create(:user , username: "winniesss" , role: "instructor" , phone: "123-567-8903", email: "akam@qatar.cmu.edu" , password: "water" , password_confirmation: "water" )
+      @ahm_user = FactoryBot.create(:user, username: "robber", phone: "123-456-7890" , role: "parent",  phone: "123-567-9904", email: "ahm@qatar.cmu.edu" , password: "drift" , password_confirmation: "drift")
+      @alex_user = FactoryBot.create(:user, username: "tannk", phone: "412-369-4314",email: "ahmn@qatar.cmu.edu" , password: "dnrift" , password_confirmation: "dnrift", role: "instructor" )
+      @rachel_user = FactoryBot.create(:user, username: "racheel", role: "instructor" ,email: "ahjm@qatar.cmu.edu" , password: "drrift" , password_confirmation: "drrift", phone: "678-098-7890")
     end
 
     def delete_users
-      @batoul_user.delete
-      @preetha_user.delete
-      @osama_user.delete
+      @kam_user.delete
+      @ahm_user.delete
+      @alex_user.delete
+      @rachel_user.delete
+   
     end
 
-    def create_more_users
-      @samiha_user     = FactoryBot.create(:user, username: "sam", role: "instructor")
-      @sadeka_user     = FactoryBot.create(:user, username: "sad", role: "instructor")
-      @sufia_user      = FactoryBot.create(:user, username: "suf", role: "instructor")
-      @iram_user       = FactoryBot.create(:user, username: "ir", role: "instructor")
-      @ahmed_user      = FactoryBot.create(:user, username: "a", role: "instructor")
-      @mohammed_user   = FactoryBot.create(:user, username: "moh", role: "instructor")
-      @daniel_user     = FactoryBot.create(:user, username: "dan", role: "instructor")
-      @nouser_user     = FactoryBot.create(:user, username: "nouser", role: "instructor")
-    end
-
-    def delete_more_users
-      @samiha_user.delete    
-      @sadeka_user.delete
-      @sufia_user.delete
-      @iram_user.delete
-      @ahmed_user.delete
-      @mohammed_user.delete
-      @daniel_user.delete
-      @noclue_user.delete
-    end
-
+   
     def create_family_users
-      @siddiq_user = FactoryBot.create(:user, username: "siddiq", role: "parent")
-      @basak_user  = FactoryBot.create(:user, username: "basak", role: "parent")
-      @khan_user   = FactoryBot.create(:user, username: "khan", role: "parent")
-      @nofam_user  = FactoryBot.create(:user, username: "nofam", role: "parent")
-
+      @kamathi_user = FactoryBot.create(:user, username: "winniess", role: "parent", phone: "123-567-8904", email: "akammath@qatar.cmu.edu" , password: "hate" , password_confirmation: "hate")
+      @ahmedi_user   = FactoryBot.create(:user, username: "jaahils", role: "parent" ,phone: "120-567-8904", email: "rahill@qatar.cmu.edu" , password: "love" , password_confirmation: "love")
+    
     end
 
     def delete_family_users
-      @siddiq_user.delete
-      @basak_user.delete
-      @khan_user.delete
-      @nofam_user.delete
+      @kamathi_user.delete
+      @ahmedi_user.delete
+     
     end
   end
 end

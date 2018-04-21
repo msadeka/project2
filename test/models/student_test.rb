@@ -1,189 +1,112 @@
 require 'test_helper'
 
 class StudentTest < ActiveSupport::TestCase
-  # test relationships
   should belong_to(:family)
   should have_many(:registrations)
-  should have_many(:camps).through(:registrations)
-
-  # test validations with matchers (as possible)
+ 
   should validate_presence_of(:first_name)
   should validate_presence_of(:last_name)
   should validate_presence_of(:family_id)
   should validate_numericality_of(:family_id).only_integer.is_greater_than(0)
-
-  should allow_value(1000).for(:rating)
-  should allow_value(0).for(:rating)
-  should allow_value(nil).for(:rating)
-  should_not allow_value(3001).for(:rating)
-  should_not allow_value(-1).for(:rating)
-  should_not allow_value(500.50).for(:rating)
-  should_not allow_value("bad").for(:rating)
-
-  should allow_value(10.years.ago.to_date).for(:date_of_birth)
+  
+  should allow_value(22.years.ago.to_date).for(:date_of_birth)
   should_not allow_value(Date.today).for(:date_of_birth)
   should_not allow_value(1.day.from_now.to_date).for(:date_of_birth)
-  should_not allow_value("abcd").for(:date_of_birth)
-  should_not allow_value(1000).for(:date_of_birth)
-  should_not allow_value(89.898).for(:date_of_birth)
+  should_not allow_value("bad").for(:date_of_birth)
+  should_not allow_value(10).for(:date_of_birth)
+  should_not allow_value(1.1).for(:date_of_birth)
 
-  include Contexts
+  should allow_value(100).for(:rating)
+  should allow_value(0).for(:rating)
+  should allow_value(nil).for(:rating)
+  should_not allow_value(3009).for(:rating)
+  should_not allow_value(-1).for(:rating)
+  should_not allow_value(8.40).for(:rating)
+  should_not allow_value("bad").for(:rating)
+
   context "Within context" do
     setup do 
-      create_family_users
+     # create_family_users
       create_families
       create_students
-    end
-
-    should "verify that the student's family is active in the system" do
-      create_inactive_families
-      mercury = FactoryBot.build(:student, family: @inactfam, first_name: "Mercury")
-      deny mercury.valid?
-      delete_inactive_families
-      hydrogen = FactoryBot.build(:family, family_name: "Hydrogen")
-      barium = FactoryBot.build(:student, family: hydrogen, first_name: "Barium")
-      deny barium.valid?
-    end
-
-    should "verify that student with no rating has default set to zero" do
+      create_family_users
       create_inactive_students
-      assert_equal 0, @inactstudent.rating
-      delete_inactive_students
+      create_inactive_families
+    end
+    
+   
+    
+    should "order students in alphabetical order" do
+      assert_equal ["Ahmed, Rahil", "Kamath, Ashwini" , "Sadeka, Samiha"], Student.alphabetical.all.map(&:name)
+    end
+    
+    should "have below_rating scope" do 
+      assert_equal 1, Student.below_rating(1000).size
+      assert_equal ["Rahil"], Student.below_rating(1000).all.map(&:first_name).sort  
+      assert_equal 2, Student.below_rating(3000).size
+      assert_equal ["Ashwini", "Rahil"], Student.below_rating(3000).all.map(&:first_name).sort
     end
 
+    should "have at_or_above_rating scope" do
+     
+      assert_equal 1, Student.at_or_above_rating(2010).size
+      assert_equal ["Ashwini"], Student.at_or_above_rating(1010).all.map(&:first_name).sort      
+    end
+    
+    should "return active students" do
+     
+      assert_equal 2, Student.active.size
+      assert_equal ["Ashwini", "Rahil"], Student.active.all.map(&:first_name).sort
+     
+    end
+    
+    should "return inactive students" do
+     
+      assert_equal 1, Student.inactive.size
+      assert_equal ["Samiha"], Student.inactive.all.map(&:first_name).sort
+    
+    end
+    
     should "show that name method works" do
-      assert_equal "Siddiq, Israt", @israt.name
-      assert_equal "Khan, Yusuf", @yusuf.name
+      assert_equal "Kamath, Ashwini", @ashwini.name
     end
     
     should "show that proper_name method works" do
-      assert_equal "Zahir Siddiq", @zahir.proper_name
-      assert_equal "Sheikh Khan", @sheikh.proper_name
-    end
-
-    should "have working age method" do 
-      assert_equal 11, @kelsey.age  # Kelsey is a few weeks older than 11
-      assert_equal 9, @peter.age    # Peter just turned 9 on this day
-    end
-
-    should "sort students in alphabetical order" do
-      assert_equal ["Gruberman, Ted", "Regan, Kelsey", "Regan, Peter", "Regan, Sean", "Skirpan, Max", "Skirpan, Zach"], Student.alphabetical.all.map(&:name)
-    end
-
-    should "show that there are six active students" do
-      create_inactive_students
-      assert_equal 6, Student.active.size
-      assert_equal ["Kelsey", "Max", "Peter", "Sean", "Ted", "Zach"], Student.active.all.map(&:first_name).sort
-      delete_inactive_students
+      assert_equal "Rahil Ahmed", @rahil.proper_name
     end
     
-    should "show that there is one inactive student" do
-      create_inactive_students
-      assert_equal 1, Student.inactive.size
-      assert_equal ["Inactstudent"], Student.inactive.all.map(&:first_name).sort
-      delete_inactive_students
+      should "check the student with no rating has default set to zero" do
+      @hasan_user   = FactoryBot.create(:user, username: "hasann", role: "admin", active: false , password: "food" , phone: "124-789-0987" , password_confirmation: "food", email: "hasan@qatar.cmu.edu")
+      @hasan = FactoryBot.create(:family, user: @hasan_user, family_name: "Hasan", parent_first_name: "Mohammad", active: false)
+      @ha = FactoryBot.create(:student, family: @hasan, first_name: "Hasann", last_name: "Sun", date_of_birth: 25.years.ago.to_date, active: false, rating: nil)
+      assert_equal nil, @ha.rating
+     
     end
-
-    should "have working below_rating scope" do |variable|
-      assert_equal 4, Student.below_rating(1000).size
-      assert_equal ["Kelsey", "Max", "Peter", "Ted"], Student.below_rating(1000).all.map(&:first_name).sort      
+    
+     should "have an  age method" do 
+      assert_equal 18, @rahil.age 
+      assert_equal 21, @ashwini.age  
     end
-
-    should "have working at_or_above_rating scope" do
-      # Zach is at 1010 so set the floor there instead of 1000 to test edge case
-      assert_equal 2, Student.at_or_above_rating(1010).size
-      assert_equal ["Sean", "Zach"], Student.at_or_above_rating(1010).all.map(&:first_name).sort      
+    
+     should "not allow locations with past camps to be destroyed" do
+      
+      
+      @GIS = FactoryBot.create(:curriculum, name: "Gis", min_rating: 800, max_rating: 3000, active: true)
+      @medium = FactoryBot.create(:curriculum, name: "Medium", min_rating: 0, max_rating: 1000, active: true)
+      @ec = FactoryBot.create(:location, name: 'Ec',  street_1: 'al-luqta' , max_capacity: 100, zip: 15213 , active: true) 
+      @khor = FactoryBot.create(:location, name: 'Khor',  street_1: 'al-dar' , max_capacity: 150, zip: 15210 , active: true)
+       
+      @ec_camp = FactoryBot.create(:camp, curriculum: @GIS, start_date: Date.new(2018,10,9), end_date: Date.new(2018,10,25),  time_slot: "pm", location: @ec , active: true , cost: 150.0)
+      @khor_camp = FactoryBot.create(:camp, curriculum: @medium, start_date: Date.new(2018,10,19), end_date: Date.new(2018,10,25), time_slot: "am", location: @khor , active: true , cost: 140.0)
+        
+      @ashwini_reg = FactoryBot.create(:registration, camp: @ec_camp, student: @ashwini)
+      @rahil_reg = FactoryBot.create(:registration, camp: @khor_camp, student: @rahil)
+     
+       @ec_camp.update_attribute(:start_date, 52.weeks.ago.to_date)
+      @ec_camp.update_attribute(:end_date, 51.weeks.ago.to_date)
+      assert @ashwini.destroy      
+     
     end
-
-    should "allow a student with no past camps to be destroyed" do
-      # check against student who has never had a registration (and no one has yet...)
-      assert @sean.destroy
-      # check against student with one upcoming registration
-      create_curriculums
-      create_locations
-      create_camps
-      create_registrations
-      assert_equal 3, @camp4.registrations.count
-      assert @zach.destroy
-      @camp4.reload
-      assert_equal 2, @camp4.registrations.count
-      delete_registrations
-      delete_camps
-      delete_locations
-      delete_curriculums
-    end
-
-    should "deactive a student with past camps rather than destroy" do
-      # check against student with one upcoming registration
-      create_curriculums
-      create_locations
-      create_camps
-      create_registrations
-      # move camp 1 into the past
-      @camp1.update_attribute(:start_date, 52.weeks.ago.to_date)
-      @camp1.update_attribute(:end_date, 51.weeks.ago.to_date)
-      assert_equal 3, @camp4.registrations.count
-      assert_equal 2, @peter.registrations.count
-      deny @peter.destroy
-      @camp4.reload
-      deny @peter.active
-      assert_equal 2, @camp4.registrations.count
-      assert_equal 1, @peter.registrations.count
-      delete_registrations
-      delete_camps
-      delete_locations
-      delete_curriculums
-    end
-
-    should "not deactive a student because of an update rollback" do
-      # check against student with one upcoming registration
-      create_curriculums
-      create_locations
-      create_camps
-      create_registrations
-      # move camp 1 into the past
-      @camp1.update_attribute(:start_date, 52.weeks.ago.to_date)
-      @camp1.update_attribute(:end_date, 51.weeks.ago.to_date)
-      assert_equal 3, @camp4.registrations.count
-      assert_equal 2, @peter.registrations.count
-      @peter.last_name = nil
-      deny @peter.valid?
-      deny @peter.save
-      # peter and his registrations remain unchanged
-      assert @peter.active
-      assert_equal 3, @camp4.registrations.count
-      assert_equal 2, @peter.registrations.count
-      delete_registrations
-      delete_camps
-      delete_locations
-      delete_curriculums
-    end
-
-    should "remove upcoming registrations for inactive student" do
-      create_curriculums
-      create_locations
-      create_camps
-      create_registrations
-      assert_equal 3, @camp4.registrations.count
-      assert_equal 1, @zach.registrations.count
-      @zach.make_inactive
-      @zach.reload
-      deny @zach.active
-      assert_equal 2, @camp4.registrations.count
-      assert_equal 0, @zach.registrations.count
-      delete_registrations
-      delete_camps
-      delete_locations
-      delete_curriculums
-    end
-
-    ### TESTS NOT REQUIRED FOR PHASE 4
-    should "show there are make_active and make_inactive methods" do
-      assert @sean.active
-      @sean.make_inactive
-      deny @sean.active
-      @sean.make_active
-      assert @sean.active
-    end
+    
   end
 end

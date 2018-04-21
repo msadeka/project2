@@ -1,3 +1,5 @@
+# extracted from credit card lab
+
 class CreditCardType
   attr_reader :name, :pattern
 

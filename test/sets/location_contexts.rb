@@ -1,29 +1,33 @@
 module Contexts
   module LocationContexts
+    # create your contexts here...
     def create_active_locations
-      @ec = FactoryBot.create(:location, name: "Education City", street_1: "Al Gharrafa", street_2: nil, city: "Doha", zip: "11111")
-      @rt = FactoryBot.create(:location) 
+      @north = FactoryBot.create(:location, name: "North Side", street_1: "801 Union Place", street_2: nil, city: "Pittsburgh", zip: "15212")
+      # switched order so alphabetical is not same as order created
+      @cmu = FactoryBot.create(:location) 
+      @ap = FactoryBot.create(:location) 
     end
 
     def delete_active_locations
-      @ec.delete
-      @rt.delete
-    end
-
-    def create_inactive_locations
-      @ap = FactoryBot.create(:location, name: "Aspire Park", street_1: "Al Rayyan", street_2: nil, city: "Doha", zip: "22222", active: false)
-    end
-
-    def delete_inactive_locations
+      @cmu.delete
+      @north.delete
       @ap.delete
     end
 
+    def create_inactive_locations
+      @sqhill = FactoryBot.create(:location, name: "Squirrel Hill", street_1: "5738 Forbes Avenue", street_2: nil, city: "Pittsburgh", zip: "15217", active: false)
+    end
+
+    def delete_inactive_locations
+      @sqhill.delete
+    end
+
     def create_locations_never_used_by_camps
-      @notused = FactoryBot.create(:location, name: "Not Used", street_1: "Location", street_2: nil, city: "Inland", zip: "33333")
+      @acac = FactoryBot.create(:location, name: "ACAC", street_1: "250 East Ohio St", street_2: nil, city: "Pittsburgh", zip: "15212")
     end
 
     def delete_locations_never_used_by_camps
-      @notused.delete
+      @acac.delete
     end
 
     def create_locations
