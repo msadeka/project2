@@ -2,7 +2,7 @@ FactoryBot.define do
   
   factory :curriculum do
     name "Mastering Chess Tactics"
-    description "This camp is designed for any student who has mastered basic mating patterns and understands opening principles and is looking to improve his/her ability use chess tactics in game situations."
+    description "For expert level chess techniques."
     min_rating 400
     max_rating 850
     active true
@@ -11,7 +11,7 @@ FactoryBot.define do
   factory :instructor do
     first_name "Mark"
     last_name "Heimann"
-    bio "Mark is currently among the top 150 players in the United States and has won 4 national scholastic chess championships."
+    bio "Great Player."
     association :user
     active true
   end

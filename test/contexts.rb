@@ -26,12 +26,10 @@ module Contexts
 
   def create_cuke_contexts
     create_curriculums
-    create_more_curriculums
     create_active_locations
     create_instructors
     create_camps
     create_camp_instructors
-    create_more_curriculums
     create_more_instructors
     create_past_camps
     create_upcoming_camps
