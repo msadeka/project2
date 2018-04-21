@@ -1,8 +1,30 @@
 FactoryBot.define do
   
+  factory :user do
+    username "oali"
+    role "instructor"
+  end
+  
+  factory :student do
+    first_name "Sheikh"
+    last_name "Khan"
+    rating 1000
+    active true
+  end
+  
+  factory :registration do
+    association :camp
+    association :student
+  end
+  
+  factory :family do
+    family_name "Basak"
+    parent_first_name "Paromita"
+  end
+  
   factory :curriculum do
     name "Mastering Chess Tactics"
-    description "For expert level chess techniques."
+    description "This camp is designed for any student who has mastered basic mating patterns and understands opening principles and is looking to improve his/her ability use chess tactics in game situations."
     min_rating 400
     max_rating 850
     active true
@@ -11,8 +33,7 @@ FactoryBot.define do
   factory :instructor do
     first_name "Mark"
     last_name "Heimann"
-    bio "Great Player."
-    association :user
+    bio "Mark is currently among the top 150 players in the United States and has won 4 national scholastic chess championships."
     active true
   end
   
@@ -28,9 +49,9 @@ FactoryBot.define do
   end
   
   factory :camp_instructor do 
-    association :camp
-    association :instructor
-  end
+     association :camp
+     association :instructor
+   end
 
   factory :location do
     name "Carnegie Mellon"
@@ -40,38 +61,6 @@ FactoryBot.define do
     state "PA"
     zip "15213"
     max_capacity 16
-    active true
-  end
-  
-  factory :student do
-    first_name "Ted"
-    last_name "Gruberman"
-    association :family
-    rating nil
-    date_of_birth 10.years.ago.to_date
-    active true
-  end
-
-  factory :family do
-    family_name "Gruberman"
-    parent_first_name "Ed"
-    association :user
-    active true
-  end
-
-  factory :registration do
-    association :camp
-    association :student
-    payment "YmVjY2E6c2VjcmV0"
-  end
-
-  factory :user do
-    username "oali"
-    password "doIcare"
-    password_confirmation "doIcare"
-    role "admin"
-    email { |a| "#{a.username}@notabigdeal.com".downcase }
-    phone { rand(10 ** 10).to_s.rjust(10,'0') }
     active true
   end
 
