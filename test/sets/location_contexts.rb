@@ -5,13 +5,11 @@ module Contexts
       @north = FactoryBot.create(:location, name: "North Side", street_1: "801 Union Place", street_2: nil, city: "Pittsburgh", zip: "15212")
       # switched order so alphabetical is not same as order created
       @cmu = FactoryBot.create(:location) 
-      @ap = FactoryBot.create(:location) 
     end
 
     def delete_active_locations
       @cmu.delete
       @north.delete
-      @ap.delete
     end
 
     def create_inactive_locations

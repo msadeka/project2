@@ -1,15 +1,15 @@
 module Contexts
   module UserContexts
     def create_users
-      @kam_user = FactoryBot.create(:user , username: "winniesss" , role: "instructor" , phone: "123-567-8903", email: "akam@qatar.cmu.edu" , password: "water" , password_confirmation: "water" )
-      @ahm_user = FactoryBot.create(:user, username: "robber", phone: "123-456-7890" , role: "parent",  phone: "123-567-9904", email: "ahm@qatar.cmu.edu" , password: "drift" , password_confirmation: "drift")
-      @alex_user = FactoryBot.create(:user, username: "tannk", phone: "412-369-4314",email: "ahmn@qatar.cmu.edu" , password: "dnrift" , password_confirmation: "dnrift", role: "instructor" )
-      @rachel_user = FactoryBot.create(:user, username: "racheel", role: "instructor" ,email: "ahjm@qatar.cmu.edu" , password: "drrift" , password_confirmation: "drrift", phone: "678-098-7890")
+      @samiha_user = FactoryBot.create(:user, username: "samiha", role: "instructor" , phone: "1235678910", email: "msadeka@qatar.cmu.edu", password: "passed", password_confirmation: "passed" )
+      @sadia_user  = FactoryBot.create(:user, username: "sadia", role: "parent", phone: "1234567890" , email: "sadia@qatar.cmu.edu", password: "passed1", password_confirmation: "passed1")
+      @alex_user   = FactoryBot.create(:user, username: "alex", role: "instructor", phone: "555-666-7777", email: "alex@qatar.cmu.edu", password: "passed2", password_confirmation: "passed2")
+      @rachel_user = FactoryBot.create(:user, username: "rachel", role: "instructor", phone: "111-333-5555", email: "rachel@qatar.cmu.edu", password: "passed3", password_confirmation: "passed3")
     end
 
     def delete_users
-      @kam_user.delete
-      @ahm_user.delete
+      @samiha_user.delete
+      @sadia_user.delete
       @alex_user.delete
       @rachel_user.delete
    
@@ -17,14 +17,14 @@ module Contexts
 
    
     def create_family_users
-      @kamathi_user = FactoryBot.create(:user, username: "winniess", role: "parent", phone: "123-567-8904", email: "akammath@qatar.cmu.edu" , password: "hate" , password_confirmation: "hate")
-      @ahmedi_user   = FactoryBot.create(:user, username: "jaahils", role: "parent" ,phone: "120-567-8904", email: "rahill@qatar.cmu.edu" , password: "love" , password_confirmation: "love")
+      @samihaf_user = FactoryBot.create(:user, username: "samiha", role: "parent", phone: "555-555-5555", email: "msadeka@qatar.cmu.edu", password: "passed4" , password_confirmation: "passed4")
+      @sadiaf_user   = FactoryBot.create(:user, username: "sadia", role: "parent", phone: "666-666-6666", email: "sadia@qatar.cmu.edu", password: "passed4" , password_confirmation: "passed4")
     
     end
 
     def delete_family_users
-      @kamathi_user.delete
-      @ahmedi_user.delete
+      @samihaf_user.delete
+      @sadiaf_user.delete
      
     end
   end

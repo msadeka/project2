@@ -79,12 +79,12 @@ class InstructorTest < ActiveSupport::TestCase
     end
 
     should "not allow an instructor to be destroyed if has taught a past camp" do
-      @GIS = FactoryBot.create(:curriculum, name: "Gis", min_rating: 800, max_rating: 3000, active: true)
-      @medium = FactoryBot.create(:curriculum, name: "Medium", min_rating: 0, max_rating: 1000, active: true)
+      @hard = FactoryBot.create(:curriculum, name: "Hard", min_rating: 800, max_rating: 3000, active: true)
+      @easy = FactoryBot.create(:curriculum, name: "Easy", min_rating: 0, max_rating: 1000, active: true)
       @ec = FactoryBot.create(:location, name: 'Ec',  street_1: 'al-luqta' , max_capacity: 100, zip: 15213 , active: true) 
       @khor = FactoryBot.create(:location, name: 'Khor',  street_1: 'al-dar' , max_capacity: 150, zip: 15210 , active: true)
        
-      @ec_camp = FactoryBot.create(:camp, curriculum: @GIS, start_date: Date.new(2018,10,9), end_date: Date.new(2018,10,25),  time_slot: "pm", location: @ec , active: true , cost: 150.0)
+      @ec_camp = FactoryBot.create(:camp, curriculum: @hard, start_date: Date.new(2018,10,9), end_date: Date.new(2018,10,25),  time_slot: "pm", location: @ec , active: true , cost: 150.0)
       @alex   = FactoryBot.create(:instructor, first_name: "Alex", last_name: "Mark", bio: nil, active: true)
       @alex_c1 = FactoryBot.create(:camp_instructor, instructor: @alex, camp: @ec_camp)
       @ec_camp.update_attribute(:start_date, 52.weeks.ago.to_date)

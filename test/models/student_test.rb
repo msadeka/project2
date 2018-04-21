@@ -9,24 +9,23 @@ class StudentTest < ActiveSupport::TestCase
   should validate_presence_of(:family_id)
   should validate_numericality_of(:family_id).only_integer.is_greater_than(0)
   
-  should allow_value(22.years.ago.to_date).for(:date_of_birth)
+  should allow_value(10.years.ago.to_date).for(:date_of_birth)
   should_not allow_value(Date.today).for(:date_of_birth)
-  should_not allow_value(1.day.from_now.to_date).for(:date_of_birth)
-  should_not allow_value("bad").for(:date_of_birth)
-  should_not allow_value(10).for(:date_of_birth)
-  should_not allow_value(1.1).for(:date_of_birth)
+  should_not allow_value(100.day.from_now.to_date).for(:date_of_birth)
+  should_not allow_value("abcd").for(:date_of_birth)
+  should_not allow_value(100).for(:date_of_birth)
+  should_not allow_value(1.1323).for(:date_of_birth)
 
   should allow_value(100).for(:rating)
   should allow_value(0).for(:rating)
   should allow_value(nil).for(:rating)
-  should_not allow_value(3009).for(:rating)
-  should_not allow_value(-1).for(:rating)
+  should_not allow_value(4000).for(:rating)
+  should_not allow_value(-100).for(:rating)
   should_not allow_value(8.40).for(:rating)
-  should_not allow_value("bad").for(:rating)
+  should_not allow_value("abcd").for(:rating)
 
   context "Within context" do
     setup do 
-     # create_family_users
       create_families
       create_students
       create_family_users
@@ -34,79 +33,52 @@ class StudentTest < ActiveSupport::TestCase
       create_inactive_families
     end
     
-   
-    
     should "order students in alphabetical order" do
-      assert_equal ["Ahmed, Rahil", "Kamath, Ashwini" , "Sadeka, Samiha"], Student.alphabetical.all.map(&:name)
+      assert_equal ["Bad, Good", "Mohammed, Ahmed", "Sadeka, Salma"], Student.alphabetical.all.map(&:name)
     end
     
     should "have below_rating scope" do 
-      assert_equal 1, Student.below_rating(1000).size
-      assert_equal ["Rahil"], Student.below_rating(1000).all.map(&:first_name).sort  
+      assert_equal 2, Student.below_rating(1000).size
+      assert_equal ["Ahmed", "Salma"], Student.below_rating(1000).all.map(&:first_name).sort  
       assert_equal 2, Student.below_rating(3000).size
-      assert_equal ["Ashwini", "Rahil"], Student.below_rating(3000).all.map(&:first_name).sort
+      assert_equal ["Ahmed", "Salma"], Student.below_rating(3000).all.map(&:first_name).sort
     end
 
     should "have at_or_above_rating scope" do
-     
-      assert_equal 1, Student.at_or_above_rating(2010).size
-      assert_equal ["Ashwini"], Student.at_or_above_rating(1010).all.map(&:first_name).sort      
+      assert_equal 0, Student.at_or_above_rating(2000).size
+      assert_equal [], Student.at_or_above_rating(1000).all.map(&:first_name).sort      
     end
     
     should "return active students" do
-     
       assert_equal 2, Student.active.size
-      assert_equal ["Ashwini", "Rahil"], Student.active.all.map(&:first_name).sort
-     
+      assert_equal ["Ahmed", "Salma"], Student.active.all.map(&:first_name).sort
     end
     
     should "return inactive students" do
-     
       assert_equal 1, Student.inactive.size
-      assert_equal ["Samiha"], Student.inactive.all.map(&:first_name).sort
-    
+      assert_equal ["Good"], Student.inactive.all.map(&:first_name).sort
     end
     
     should "show that name method works" do
-      assert_equal "Kamath, Ashwini", @ashwini.name
+      assert_equal "Sadeka, Salma", @salma.name
+      assert_equal "Mohammed, Ahmed", @ahmed.name
     end
     
     should "show that proper_name method works" do
-      assert_equal "Rahil Ahmed", @rahil.proper_name
+      assert_equal "Ahmed Mohammed", @ahmed.proper_name
+      assert_equal "Salma Sadeka", @salma.proper_name
     end
     
-      should "check the student with no rating has default set to zero" do
-      @hasan_user   = FactoryBot.create(:user, username: "hasann", role: "admin", active: false , password: "food" , phone: "124-789-0987" , password_confirmation: "food", email: "hasan@qatar.cmu.edu")
-      @hasan = FactoryBot.create(:family, user: @hasan_user, family_name: "Hasan", parent_first_name: "Mohammad", active: false)
-      @ha = FactoryBot.create(:student, family: @hasan, first_name: "Hasann", last_name: "Sun", date_of_birth: 25.years.ago.to_date, active: false, rating: nil)
-      assert_equal nil, @ha.rating
-     
+    should "check the student with no rating has default set to zero" do
+      @nil_user    = FactoryBot.create(:user, username: "nil", role: "admin", active: false , password: "donee" , password_confirmation: "donee", phone: "111-111-1111" , email: "nil@qatar.cmu.edu")
+      @nill        = FactoryBot.create(:family, user: @nil_user, family_name: "Nil", parent_first_name: "Nillll", active: false)
+      @nil_student = FactoryBot.create(:student, family: @nill, first_name: "Nill", last_name: "Nill", date_of_birth: 25.years.ago.to_date, active: false, rating: nil)
+      assert_equal nil, @nil_student.rating
     end
     
-     should "have an  age method" do 
-      assert_equal 18, @rahil.age 
-      assert_equal 21, @ashwini.age  
+    should "have an  age method" do 
+      assert_equal 18, @ahmed.age 
+      assert_equal 21, @salma.age  
     end
-    
-     should "not allow locations with past camps to be destroyed" do
-      
-      
-      @GIS = FactoryBot.create(:curriculum, name: "Gis", min_rating: 800, max_rating: 3000, active: true)
-      @medium = FactoryBot.create(:curriculum, name: "Medium", min_rating: 0, max_rating: 1000, active: true)
-      @ec = FactoryBot.create(:location, name: 'Ec',  street_1: 'al-luqta' , max_capacity: 100, zip: 15213 , active: true) 
-      @khor = FactoryBot.create(:location, name: 'Khor',  street_1: 'al-dar' , max_capacity: 150, zip: 15210 , active: true)
-       
-      @ec_camp = FactoryBot.create(:camp, curriculum: @GIS, start_date: Date.new(2018,10,9), end_date: Date.new(2018,10,25),  time_slot: "pm", location: @ec , active: true , cost: 150.0)
-      @khor_camp = FactoryBot.create(:camp, curriculum: @medium, start_date: Date.new(2018,10,19), end_date: Date.new(2018,10,25), time_slot: "am", location: @khor , active: true , cost: 140.0)
-        
-      @ashwini_reg = FactoryBot.create(:registration, camp: @ec_camp, student: @ashwini)
-      @rahil_reg = FactoryBot.create(:registration, camp: @khor_camp, student: @rahil)
-     
-       @ec_camp.update_attribute(:start_date, 52.weeks.ago.to_date)
-      @ec_camp.update_attribute(:end_date, 51.weeks.ago.to_date)
-      assert @ashwini.destroy      
-     
-    end
-    
   end
 end

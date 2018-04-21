@@ -23,17 +23,16 @@ class FamilyTest < ActiveSupport::TestCase
     # end
     
     should "sort families in alphabetical order" do
-      assert_equal ["Ahmed", "Kamath", "Sadek", "Sadeka"], Family.alphabetical.all.map(&:family_name)
+      assert_equal ["Bad", "Darwish", "Mohammed", "Sadeka"], Family.alphabetical.all.map(&:family_name)
     end
 
     should "return active families" do
      
-      assert_equal ["Ahmed", "Kamath", "Sadek"], Family.active.all.map(&:family_name).sort
+      assert_equal ["Darwish", "Mohammed", "Sadeka"], Family.active.all.map(&:family_name).sort
     end
     
     should "return inactive family" do
-     
-      assert_equal ["Sadeka"], Family.inactive.all.map(&:family_name).sort
+      assert_equal ["Bad"], Family.inactive.all.map(&:family_name).sort
     end
 
 
@@ -44,16 +43,15 @@ class FamilyTest < ActiveSupport::TestCase
       create_camps
       create_students
       create_registrations
-      assert_equal 1, @kamath.registrations.count
-      @kamath.make_inactive
-      @kamath.reload
-      assert_equal 0, @kamath.registrations.count
-     
+      assert_equal 1, @sadeka_family.registrations.count
+      @sadeka_family.make_inactive
+      @sadeka_family.reload
+      assert_equal 0, @sadeka_family.registrations.count
     end
 
 
    should "show that families cannot be destroyed" do
-      assert_not @kamath.destroy
+      assert_not @mohammed_family.destroy
     end
     
 end

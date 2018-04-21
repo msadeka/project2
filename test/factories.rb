@@ -1,24 +1,13 @@
 FactoryBot.define do
- 
-  # factory :instructor do
-  #   first_name "MyString"
-  #   last_name "MyString"
-  #   bio "MyText"
-  #   email "MyString"
-  #   phone "MyString"
-  #   active false
-   
-  # end
+  
   factory :user do
-    username "tank"
-   
+    username "dan"
     role "instructor"
    
   end
   factory :student do
-    first_name "Ashwini"
-    last_name "Kamath"
-   
+    first_name "Salma"
+    last_name "Sadeka"
     rating 2010
     active true
   end
@@ -26,9 +15,10 @@ FactoryBot.define do
     association :camp
     association :student
   end
+  
   factory :family do
-    family_name "Ahmed"
-    parent_first_name "Aahil"
+    family_name "Mohammed"
+    parent_first_name "Ahmed"
    
   end
   
@@ -65,10 +55,10 @@ FactoryBot.define do
    end
 
   factory :location do
-    name "Ec"
-    street_1 "al-luqta"
-    zip "15213"
-    max_capacity 100
+    name "Education City"
+    street_1 "Al Rayyan"
+    zip "12345"
+    max_capacity 50
     active true
   end
 

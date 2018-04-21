@@ -49,14 +49,14 @@ class CurriculumTest < ActiveSupport::TestCase
    
 
     # test the scope 'alphabetical'
-    should "shows that there are three curriculums in in alphabetical order" do
-      assert_equal ["Endgame Principles", "Mastering Chess Tactics", "Smith-Morra Gambit"], Curriculum.alphabetical.all.map(&:name), "#{Curriculum.class}"
+    should "shows that there are five curriculums in in alphabetical order" do
+      assert_equal ["Endgame Principles", "Low", "Mastering Chess Tactics", "Medium", "Smith-Morra Gambit"], Curriculum.alphabetical.all.map(&:name), "#{Curriculum.class}"
     end
     
     # test the scope 'active'
-    should "shows that there are two active curriculums" do
-      assert_equal 2, Curriculum.active.size
-      assert_equal ["Endgame Principles", "Mastering Chess Tactics"], Curriculum.active.all.map(&:name).sort, "#{Curriculum.methods}"
+    should "shows that there are four active curriculums" do
+      assert_equal 4, Curriculum.active.size
+      assert_equal ["Endgame Principles", "Low", "Mastering Chess Tactics", "Medium"], Curriculum.active.all.map(&:name).sort, "#{Curriculum.methods}"
     end
     
     # test the scope 'active'
@@ -67,8 +67,8 @@ class CurriculumTest < ActiveSupport::TestCase
 
     # test the scope 'for_rating'
     should "shows that there is a working for_rating scope" do
-      assert_equal 1, Curriculum.for_rating(1400).size
-      assert_equal ["Mastering Chess Tactics","Smith-Morra Gambit"], Curriculum.for_rating(600).all.map(&:name).sort
+      assert_equal 2, Curriculum.for_rating(1400).size
+      assert_equal ["Mastering Chess Tactics", "Medium", "Smith-Morra Gambit"], Curriculum.for_rating(600).all.map(&:name).sort
     end
     
     should "show that curriculums cannot be destroyed" do

@@ -45,12 +45,12 @@ class LocationTest < ActiveSupport::TestCase
     end
 
     should "show that there are two locations in in alphabetical order" do
-      assert_equal ["Ec", "North Side"], Location.alphabetical.all.map(&:name)
+      assert_equal ["Aspire Park", "Education City", "Education City", "North Side"], Location.alphabetical.all.map(&:name)
     end
 
     should "show that there are two active locations and one inactive location" do
       create_inactive_locations
-      assert_equal ["Ec", "North Side"], Location.active.all.map(&:name).sort
+      assert_equal ["Aspire Park", "Education City", "Education City", "North Side"], Location.active.all.map(&:name).sort
       assert_equal ["Squirrel Hill"], Location.inactive.all.map(&:name).sort
       delete_inactive_locations
     end

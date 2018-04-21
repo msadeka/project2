@@ -86,13 +86,13 @@ class CampTest < ActiveSupport::TestCase
     end 
 
     should "show the four camps in in alphabetical order" do
-      assert_equal 4, Camp.alphabetical.size
-      assert_equal ["Endgame Principles", "Mastering Chess Tactics", "Mastering Chess Tactics","Mastering Chess Tactics"], Camp.alphabetical.all.map{|c| c.curriculum.name}
+      assert_equal 6, Camp.alphabetical.size
+      assert_equal ["Endgame Principles", "Low", "Mastering Chess Tactics", "Mastering Chess Tactics", "Mastering Chess Tactics", "Medium"], Camp.alphabetical.all.map{|c| c.curriculum.name}
     end
 
     should "shows the three active camps" do
-      assert_equal 3, Camp.active.size
-      assert_equal ["Endgame Principles", "Mastering Chess Tactics", "Mastering Chess Tactics"], Camp.active.all.map{|c| c.curriculum.name}.sort
+      assert_equal 5, Camp.active.size
+      assert_equal ["Endgame Principles", "Low", "Mastering Chess Tactics", "Mastering Chess Tactics", "Medium"], Camp.active.all.map{|c| c.curriculum.name}.sort
     end
     
     should "shows the one inactive camp" do
@@ -101,18 +101,18 @@ class CampTest < ActiveSupport::TestCase
     end
 
     should "shows that there are four camps in in chronological order" do
-      assert_equal 4, Camp.chronological.size
-      assert_equal ["Mastering Chess Tactics - Jul 16", "Mastering Chess Tactics - Jul 16", "Mastering Chess Tactics - Jul 23", "Endgame Principles - Jul 23"], Camp.chronological.all.map{|c| "#{c.name} - #{c.start_date.strftime("%b %d")}"}
+      assert_equal 6, Camp.chronological.size
+      assert_equal ["Mastering Chess Tactics - Jul 16", "Mastering Chess Tactics - Jul 16", "Mastering Chess Tactics - Jul 23", "Endgame Principles - Jul 23", "Low - Oct 09", "Medium - Oct 19"], Camp.chronological.all.map{|c| "#{c.name} - #{c.start_date.strftime("%b %d")}"}
     end
 
     should "shows that there are two morning camps" do
-      assert_equal 2, Camp.morning.size
-      assert_equal ["Mastering Chess Tactics", "Mastering Chess Tactics"], Camp.morning.all.map{|c| c.name}.sort
+      assert_equal 3, Camp.morning.size
+      assert_equal ["Mastering Chess Tactics", "Mastering Chess Tactics", "Medium"], Camp.morning.all.map{|c| c.name}.sort
     end
 
     should "shows that there are two afternoon camps" do
-      assert_equal 2, Camp.afternoon.size
-      assert_equal ["Endgame Principles", "Mastering Chess Tactics"], Camp.afternoon.all.map{|c| c.name}.sort
+      assert_equal 3, Camp.afternoon.size
+      assert_equal ["Endgame Principles", "Low", "Mastering Chess Tactics"], Camp.afternoon.all.map{|c| c.name}.sort
     end
 
     should "have a for_curriculum scope" do
@@ -131,7 +131,7 @@ class CampTest < ActiveSupport::TestCase
     should "shows that there are 3 upcoming camps and 1 past camp" do
       @camp1.update_attribute(:start_date, 7.days.ago.to_date) # update_attribute will bypass validation
       @camp1.update_attribute(:end_date, 2.days.ago.to_date)
-      assert_equal 3, Camp.upcoming.size
+      assert_equal 5, Camp.upcoming.size
       assert_equal 1, Camp.past.size
     end
 
