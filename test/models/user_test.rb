@@ -32,7 +32,7 @@ class UserTest < ActiveSupport::TestCase
   should_not allow_value(nil).for(:phone)
   
   
-  # context
+  include Contexts
   context "Within context" do
     setup do
       create_users

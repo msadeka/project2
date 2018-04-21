@@ -52,7 +52,7 @@ class CurriculumTest < ActiveSupport::TestCase
 
     # test the scope 'alphabetical'
     should "shows that there are three curriculums in in alphabetical order" do
-      assert_equal ["Endgame Principles", "Mastering Chess Tactics", "Smith-Morra Gambit"], Curriculum.alphabetical.all.map(&:name), "#{Curriculum.class}"
+      assert_equal ["Endgame Principles", "Mastering Chess Tactics", "No Curriculum"], Curriculum.alphabetical.all.map(&:name), "#{Curriculum.class}"
     end
     
     # test the scope 'active'
@@ -64,13 +64,13 @@ class CurriculumTest < ActiveSupport::TestCase
     # test the scope 'active'
     should "shows that there is one inactive curriculum" do
       assert_equal 1, Curriculum.inactive.size
-      assert_equal ["Smith-Morra Gambit"], Curriculum.inactive.all.map(&:name).sort
+      assert_equal ["No Curriculum"], Curriculum.inactive.all.map(&:name).sort
     end
 
     # test the scope 'for_rating'
     should "shows that there is a working for_rating scope" do
       assert_equal 1, Curriculum.for_rating(1400).size
-      assert_equal ["Mastering Chess Tactics","Smith-Morra Gambit"], Curriculum.for_rating(600).all.map(&:name).sort
+      assert_equal ["Mastering Chess Tactics", "No Curriculum"], Curriculum.for_rating(600).all.map(&:name).sort
     end
 
   end

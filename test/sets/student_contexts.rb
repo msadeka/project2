@@ -1,30 +1,29 @@
 module Contexts
   module StudentContexts
     def create_students
-      @ted    = FactoryBot.create(:student, family: @grubermans, rating: 100)
-      @zach   = FactoryBot.create(:student, family: @skirpans, first_name: "Zach", last_name: "Skirpan", date_of_birth: 10.years.ago.to_date, rating: 1010)
-      @max    = FactoryBot.create(:student, family: @skirpans, first_name: "Max", last_name: "Skirpan", date_of_birth: 7.years.ago.to_date, rating: 535)      
-      @sean   = FactoryBot.create(:student, family: @regans, first_name: "Sean", last_name: "Regan", date_of_birth: 13.years.ago.to_date, rating: 1252)
-      @kelsey = FactoryBot.create(:student, family: @regans, first_name: "Kelsey", last_name: "Regan", date_of_birth: 580.weeks.ago.to_date, rating: 964)
-      @peter  = FactoryBot.create(:student, family: @regans, first_name: "Peter", last_name: "Regan", date_of_birth: 9.years.ago.to_date, rating: 842)
+      @samiha = FactoryBot.create(:student, family: @siddiq, rating: 100)
+      @israt  = FactoryBot.create(:student, family: @siddiq, first_name: "Israt", last_name: "Siddiq", date_of_birth: 15.years.ago.to_date, rating: 10)
+      @zahir  = FactoryBot.create(:student, family: @siddiq, first_name: "Zahir", last_name: "Siddiq", date_of_birth: 2.years.ago.to_date, rating: 500)      
+      @umar   = FactoryBot.create(:student, family: @khan, first_name: "Umar", last_name: "Khan", date_of_birth: 4.years.ago.to_date, rating: 1800)
+      @yusuf  = FactoryBot.create(:student, family: @khan, first_name: "Yusuf", last_name: "Khan", date_of_birth: 2.weeks.ago.to_date, rating: 300)
+      @sheikh = FactoryBot.create(:student, family: @khan, first_name: "Sheikh", last_name: "Khan", date_of_birth: 7.years.ago.to_date, rating: 1000)
     end
 
     def delete_students
-      @ted.delete
-      @sean.delete
-      @kelsey.delete
-      @peter.delete
-      @zach.delete
-      @max.delete
+      @samiha.delete
+      @israt.delete
+      @zahir.delete
+      @umar.delete
+      @yusuf.delete
+      @sheikh.delete
     end
 
     def create_inactive_students
-      # this inactive student is also set up with no rating to test default
-      @ellen = FactoryBot.create(:student, family: @regans, first_name: "Ellen", last_name: "Regan", date_of_birth: 6.years.ago.to_date, active: false, rating: nil)
+      @inactstudent = FactoryBot.create(:student, family: @khan, first_name: "Inactstudent", last_name: "Khan", date_of_birth: 2.years.ago.to_date, active: false, rating: nil)
     end
 
     def delete_inactive_students
-      @ellen
+      @inactstudent.delete
     end
   end
 end

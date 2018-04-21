@@ -1,24 +1,23 @@
 module Contexts
   module FamilyContexts
-    # create your contexts here...
     def create_families
-      @grubermans = FactoryBot.create(:family, user: @gruberman_user)
-      @skirpans   = FactoryBot.create(:family, user: @skirpan_user, family_name: "Skirpan", parent_first_name: "Ellen")
-      @regans     = FactoryBot.create(:family, user: @regan_user, family_name: "Regan", parent_first_name: "Patrick")
+      @siddiq = FactoryBot.create(:family, user: @siddiq_user)
+      @khan   = FactoryBot.create(:family, user: @khan_user, family_name: "Khan", parent_first_name: "Aren")
+      @basak  = FactoryBot.create(:family, user: @basak_user, family_name: "Basak", parent_first_name: "Paromita")
     end
 
     def delete_families
-      @grubermans.delete
-      @regans.delete
-      @skirpans.delete
+      @siddiq.delete
+      @khan.delete
+      @basak.delete
     end
 
     def create_inactive_families
-      @ellis = FactoryBot.create(:family, user: @ellis_user, family_name: "Ellis", parent_first_name: "Carolyn", active: false)
+      @inactfam = FactoryBot.create(:family, user: @inactfam_user, family_name: "Inactfam", parent_first_name: "Him", active: false)
     end
 
     def delete_inactive_families
-      @ellis.delete
+      @inactfam.delete
     end
   end
 end

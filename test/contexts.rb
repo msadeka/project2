@@ -26,6 +26,7 @@ module Contexts
 
   def create_cuke_contexts
     create_curriculums
+    create_more_curriculums
     create_active_locations
     create_instructors
     create_camps
@@ -36,11 +37,13 @@ module Contexts
     create_upcoming_camps
     create_more_camp_instructors
     create_users
-    delete_users
     create_more_users
-    delete_more_users
     create_more_family_users
-    delete_family_users
+    create_students
+    delete_students
+    create_inactive_students
+    delete_inactive_students
+    
     
   end
 

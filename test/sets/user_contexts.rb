@@ -36,9 +36,9 @@ module Contexts
 
     def create_family_users
       @siddiq_user = FactoryBot.create(:user, username: "siddiq", role: "parent")
-      @basak_user   = FactoryBot.create(:user, username: "basak", role: "parent")
-      @khan_user     = FactoryBot.create(:user, username: "khan", role: "parent")
-      @nofam_user     = FactoryBot.create(:user, username: "nofam", role: "parent")
+      @basak_user  = FactoryBot.create(:user, username: "basak", role: "parent")
+      @khan_user   = FactoryBot.create(:user, username: "khan", role: "parent")
+      @nofam_user  = FactoryBot.create(:user, username: "nofam", role: "parent")
 
     end
 

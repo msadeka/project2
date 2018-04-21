@@ -3,31 +3,27 @@ module Contexts
     def create_curriculums
       @tactics    = FactoryBot.create(:curriculum)
       @endgames   = FactoryBot.create(:curriculum, name: "Endgame Principles", min_rating: 700, max_rating: 1500)
-      @smithmorra = FactoryBot.create(:curriculum, name: "Smith-Morra Gambit", active: false)
+      @nocur      = FactoryBot.create(:curriculum, name: "No Curriculum", active: false)
     end
 
     def delete_curriculums
       @tactics.delete
       @endgames.delete
-      @smithmorra.delete
+      @nocur.delete
     end
 
     def create_more_curriculums
-      @tal         = FactoryBot.create(:curriculum, name: "The Tactics of Tal", min_rating: 850, max_rating: 1500, description: "All about the tacicts of Tal.", active: false)
-      @nimzo       = FactoryBot.create(:curriculum, name: "Nimzo-Indian Defense", min_rating: 1000, max_rating: 3000, description: "All about the Nimzo-Indian Defense.")
-      @principles  = FactoryBot.create(:curriculum, name: "Principles of Chess", min_rating: 0, max_rating: 500, description: "All about the basic principles of chess.")
-      @positional  = FactoryBot.create(:curriculum, name: "Positional Understanding", min_rating: 1000, max_rating: 1800, description: "All about positional understanding in chess.")
-      @adv_tactics = FactoryBot.create(:curriculum, name: "Advanced Tactics Training", min_rating: 1000, max_rating: 3000, description: "All about advanced tactical training.")
-      @openings    = FactoryBot.create(:curriculum, name: "Chess Opening for Beginners", min_rating: 0, max_rating: 600, description: "All about the opening for beginners.")
+      @cur1         = FactoryBot.create(:curriculum, name: "Curriculum 1", min_rating: 1000, max_rating: 2500, description: "Best curriculum", active: false)
+      @cur2         = FactoryBot.create(:curriculum, name: "Curriculum 2", min_rating: 10, max_rating: 500, description: "Only for kids")
+      @cur3         = FactoryBot.create(:curriculum, name: "Curriculum 3", min_rating: 2000, max_rating: 3000, description: "Expert Curriculum")
+      @cur4         = FactoryBot.create(:curriculum, name: "Curriculum 4", min_rating: 10, max_rating: 2800, description: "Only for adults")
     end
 
     def delete_more_curriculums
-      @tal.delete
-      @nimzo.delete
-      @principles.delete
-      @positional.delete
-      @adv_tactics.delete
-      @openings.delete
+      @cur1.delete
+      @cur2.delete
+      @cur3.delete
+      @cur4.delete
     end
   end
 end
